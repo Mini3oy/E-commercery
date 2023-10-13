@@ -1,7 +1,7 @@
 "use client";
 
 import { GlobalContext } from "@/context";
-import { adminNavOption, navOptions, styles } from "@/utils";
+import { adminNavOption, navOptions } from "@/utils";
 import { Fragment, useContext } from "react";
 import CommmonModel from "../CommonModel";
 
@@ -19,7 +19,11 @@ function NavItems({ isModelView = false }) {
       }`}
       id="nav-items"
     >
-      <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white">
+      <ul
+        className={`flex flex-col p-4 md:p-0 mt-4 font-medium  rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white ${
+          isModelView ? "border-none" : "border border-gray-100"
+        }`}
+      >
         {isAdminView
           ? adminNavOption.map((item) => (
               <li
@@ -50,28 +54,61 @@ export default function Navber() {
       <nav className=" bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
         <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
           <div className="flex items-center cursor-pointer">
-            <span className="slef-center text-2xl font-semibold whitespace-nowrap">
-              Ecommercery
+            <span className="slef-center text-2xl font-semibold whitespace-nowrap text-black ">
+              E-commercery
             </span>
           </div>
           <div className="flex md:order-2 gap-2">
             {!isAdminView && isAuthUser ? (
               <Fragment>
-                <button className={styles.button}>Account</button>
-                <button className={styles.button}>Crat</button>
+                <button
+                  className={
+                    "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
+                  }
+                >
+                  Account
+                </button>
+                <button
+                  className={
+                    "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
+                  }
+                >
+                  Crat
+                </button>
               </Fragment>
             ) : null}
             {user?.role === "admin" ? (
               isAdminView ? (
-                <button className={styles.button}> Client View</button>
+                <button className=" mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white">
+                  {" "}
+                  Client View
+                </button>
               ) : (
-                <button className={styles.button}>Admin View</button>
+                <button
+                  className={
+                    "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
+                  }
+                >
+                  Admin View
+                </button>
               )
             ) : null}
             {isAuthUser ? (
-              <button className={styles.button}>Logout</button>
+              <button
+                className={
+                  "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
+                }
+              >
+                Logout
+              </button>
             ) : (
-              <button className={styles.button}>Login</button>
+              <button
+                className={
+                  "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
+                }
+              >
+                Login
+              </button>
             )}
             <button
               data-collapse-toggle="navbar-sticky"
