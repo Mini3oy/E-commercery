@@ -4,13 +4,10 @@ import { GlobalContext } from "@/context";
 import { adminNavOption, navOptions } from "@/utils";
 import { Fragment, useContext } from "react";
 import CommmonModel from "../CommonModel";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const isAdminView = false;
-const isAuthUser = true;
-const user = {
-  role: "admin",
-};
-
 function NavItems({ isModelView = false }) {
   return (
     <div
@@ -48,6 +45,18 @@ function NavItems({ isModelView = false }) {
 
 export default function Navber() {
   const { showNavModel, setShowNavModal } = useContext(GlobalContext);
+  const { user, isAuthUser, setIsAuthUser, setUser } =
+    useContext(GlobalContext);
+  const router = useRouter();
+  console.log(user, isAuthUser, "navber");
+
+  function handeLogout() {
+    setIsAuthUser(false);
+    setUser(null);
+    Cookies.remove("token");
+    localStorage.clear();
+    router.push("/");
+  }
 
   return (
     <>
@@ -95,6 +104,7 @@ export default function Navber() {
             ) : null}
             {isAuthUser ? (
               <button
+                onClick={handeLogout}
                 className={
                   "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
                 }
@@ -103,6 +113,7 @@ export default function Navber() {
               </button>
             ) : (
               <button
+                onClick={() => router.push("/login")}
                 className={
                   "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
                 }

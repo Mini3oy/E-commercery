@@ -5,12 +5,12 @@ import Joi from "joi";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-export const dynamic = "force-dynamic";
-
 const schema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().required(),
 });
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req) {
   await connectToDB();
@@ -18,7 +18,6 @@ export async function POST(req) {
   const { error } = schema.validate({ email, password });
 
   if (error) {
-    console.log(error);
     return NextResponse.json({
       success: false,
       message: error.details[0].message,
@@ -47,7 +46,7 @@ export async function POST(req) {
         role: checkUser?.role,
       },
       "default_secret_key",
-      { expiresIn: " id" }
+      { expiresIn: "1d" }
     );
 
     const finalData = {

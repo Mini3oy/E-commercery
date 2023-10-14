@@ -18,6 +18,7 @@ export async function POST(req) {
 
   const { name, email, password, role } = await req.json();
   //validate the schema
+
   const { error } = schema.validate({ name, email, password, role });
 
   if (error) {
