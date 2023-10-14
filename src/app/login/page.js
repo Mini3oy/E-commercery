@@ -3,9 +3,16 @@
 import InputComponent from "@/components/FormElements/InputComponent";
 import { loginFormControls } from "@/utils";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const initialFormdata = {
+  email: " ",
+  password: "",
+};
 
 export default function Login() {
   const router = useRouter();
+  console.log(formData);
 
   return (
     <div className="bg-white relative">
@@ -23,6 +30,13 @@ export default function Login() {
                       type={controlItem.type}
                       placeholder={controlItem.placeholder}
                       label={controlItem.label}
+                      value={FormData[controlItem.id]}
+                      onChange={(event) => {
+                        setFormData({
+                          ...formData,
+                          [controlItem.id]: event.target.value,
+                        });
+                      }}
                     />
                   ) : null
                 )}
