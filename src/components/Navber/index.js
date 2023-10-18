@@ -5,10 +5,9 @@ import { adminNavOption, navOptions } from "@/utils";
 import { Fragment, useContext } from "react";
 import CommmonModel from "../CommonModel";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-const isAdminView = false;
-function NavItems({ isModelView = false }) {
+function NavItems({ isModelView = false, isAdminView, router }) {
   return (
     <div
       className={`items-center justify-between w-full md:flex md:w-auto ${
@@ -26,6 +25,7 @@ function NavItems({ isModelView = false }) {
               <li
                 className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
                 key={item.id}
+                onClick={() => router.push(item.path)}
               >
                 {item.label}
               </li>
@@ -34,6 +34,7 @@ function NavItems({ isModelView = false }) {
               <li
                 className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
                 key={item.id}
+                onClick={() => router.push(item.path)}
               >
                 {item.label}
               </li>
@@ -47,8 +48,10 @@ export default function Navber() {
   const { showNavModel, setShowNavModal } = useContext(GlobalContext);
   const { user, isAuthUser, setIsAuthUser, setUser } =
     useContext(GlobalContext);
+
+  const pathName = usePathname();
   const router = useRouter();
-  console.log(user, isAuthUser, "navber");
+  console.log(pathName);
 
   function handeLogout() {
     setIsAuthUser(false);
@@ -57,12 +60,16 @@ export default function Navber() {
     localStorage.clear();
     router.push("/");
   }
+  const isAdminView = pathName.includes("admin-view");
 
   return (
     <>
       <nav className=" bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
         <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 ">
-          <div className="flex items-center cursor-pointer">
+          <div
+            onClick={() => router.push("/")}
+            className="flex items-center cursor-pointer"
+          >
             <span className="slef-center text-2xl font-semibold whitespace-nowrap text-black ">
               E-commercery
             </span>
@@ -71,6 +78,7 @@ export default function Navber() {
             {!isAdminView && isAuthUser ? (
               <Fragment>
                 <button
+                  onClick={() => router.push("/")}
                   className={
                     "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
                   }
@@ -88,12 +96,16 @@ export default function Navber() {
             ) : null}
             {user?.role === "admin" ? (
               isAdminView ? (
-                <button className=" mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white">
+                <button
+                  onClick={() => router.push("/")}
+                  className=" mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white"
+                >
                   {" "}
                   Client View
                 </button>
               ) : (
                 <button
+                  onClick={() => router.push("/admin-view")}
                   className={
                     "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tractking-wide text-white "
                   }
@@ -145,12 +157,18 @@ export default function Navber() {
               </svg>
             </button>
           </div>
-          <NavItems isModel={false} />
+          <NavItems router={router} isAdminView={isAdminView} />
         </div>
       </nav>
       <CommmonModel
         showModelTitle={false}
-        mainContent={<NavItems isModelView={true} />}
+        mainContent={
+          <NavItems
+            router={router}
+            isModelView={true}
+            isAdminView={isAdminView}
+          />
+        }
         show={showNavModel}
         setshow={setShowNavModal}
       />
